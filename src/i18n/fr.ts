@@ -14,8 +14,9 @@ export const fr = {
     accueil: 'Retour à l’accueil',
   },
   hero: {
-    surtitre: 'Collectif citoyen',
-    titre: 'La Corse de demain, nous la construisons ensemble',
+    surtitre: 'Culletivu citadinu', // en corse (lang="co" dans Hero.astro)
+    // Titre en langue corse (lang="co" dans Hero.astro), une ligne par entrée.
+    titre: ['A Corsica di dumane', 'Si custruì inseme'],
     accroche:
       'Pas de résignation, mais réappropriation démocratique. Le rejet du processus d’autonomie par le Sénat ne referme rien : il nous engage à bâtir, ici et maintenant, un véritable projet de société.',
     ctaContribuer: 'Je contribue',

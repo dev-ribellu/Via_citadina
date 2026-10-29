@@ -51,7 +51,8 @@ Coordonnées (optionnelles) :
 
 ## Commandes
 - `npm run dev` : développement
-- `npm run build` : build
+- `npm run build` : build pour OVH (avec l'URL Apps Script de `.env`, ne pas committer ce `dist/`)
+- `npm run build:depot` : build sans URL Apps Script, seul `dist/` à committer sur GitHub
 - `/deploy` : déploiement
 - `/audit` : audit accessibilité/SEO/RGPD
 
