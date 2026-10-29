@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
 ---
 <Base titre="Mentions légales – Via Citadina" description="Mentions légales du site du collectif Via Citadina.">
   <article class="prose-legal mx-auto max-w-3xl px-4 py-16 sm:px-6">
@@ -28,7 +29,7 @@ import Base from '../layouts/Base.astro';
     </p>
     <p>
       Les contributions envoyées par le formulaire sont stockées dans un tableur Google
-      Sheets (Google). Voir la <a href="/confidentialite">politique de confidentialité</a>.
+      Sheets (Google). Voir la <a href={url('/confidentialite')}>politique de confidentialité</a>.
     </p>
 
     <h2>Propriété intellectuelle</h2>
@@ -48,7 +49,7 @@ import Base from '../layouts/Base.astro';
     <h2>Données personnelles et cookies</h2>
     <p>
       Ce site ne dépose aucun cookie de mesure d'audience ni de publicité. Le traitement de
-      vos données est détaillé dans la <a href="/confidentialite">politique de confidentialité</a>.
+      vos données est détaillé dans la <a href={url('/confidentialite')}>politique de confidentialité</a>.
     </p>
   </article>
 </Base>

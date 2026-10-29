@@ -1,6 +1,7 @@
 ---
 import Logo from './Logo.astro';
 import { useTraductions } from '../i18n';
+import { url } from '../lib/url';
 
 const t = useTraductions();
 const annee = new Date().getFullYear();
@@ -14,8 +15,8 @@ const annee = new Date().getFullYear();
     </div>
     <nav aria-label="Liens légaux">
       <ul class="flex flex-col gap-2 sm:flex-row sm:gap-6">
-        <li><a href="/mentions-legales" class="text-encre underline-offset-4 hover:underline">{t.footer.mentions}</a></li>
-        <li><a href="/confidentialite" class="text-encre underline-offset-4 hover:underline">{t.footer.confidentialite}</a></li>
+        <li><a href={url('/mentions-legales')} class="text-encre underline-offset-4 hover:underline">{t.footer.mentions}</a></li>
+        <li><a href={url('/confidentialite')} class="text-encre underline-offset-4 hover:underline">{t.footer.confidentialite}</a></li>
       </ul>
     </nav>
   </div>

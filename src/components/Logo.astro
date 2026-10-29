@@ -2,6 +2,7 @@
 // Affiche /public/logo-via-citadina.png s'il existe, sinon un logo texte provisoire.
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { url } from '../lib/url';
 
 interface Props {
   class?: string;
@@ -14,10 +15,10 @@ const logo = ['logo-via-citadina-recadre.png', 'logo-via-citadina.png'].find((f)
 );
 ---
 {logo ? (
-  <img src={`/${logo}`} alt="Via Citadina" class:list={['w-auto', classe]} />
+  <img src={url(logo)} alt="Via Citadina" class:list={['w-auto', classe]} />
 ) : (
   <span class:list={['inline-flex items-center gap-2', classe]}>
-    <img src="/favicon.svg" alt="" class="h-full w-auto" />
+    <img src={url('/favicon.svg')} alt="" class="h-full w-auto" />
     <span
       class="degrade bg-clip-text font-titre text-xl font-extrabold tracking-wide text-transparent"
       style="-webkit-background-clip: text;"

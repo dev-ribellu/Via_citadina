@@ -1,5 +1,6 @@
 ---
 import { useTraductions } from '../i18n';
+import { url } from '../lib/url';
 
 const t = useTraductions();
 const f = t.form;
@@ -126,7 +127,7 @@ const endpoint = import.meta.env.PUBLIC_SHEETS_ENDPOINT ?? '';
             />
             <span class="text-sm leading-relaxed">
               {f.consentement}
-              <a href="/confidentialite" class="font-medium text-rouge-fonce underline">{f.consentementLien}</a>.
+              <a href={url('/confidentialite')} class="font-medium text-rouge-fonce underline">{f.consentementLien}</a>.
             </span>
           </label>
           <p id="consentement-erreur" class="mt-2 hidden text-sm font-medium text-rouge-fonce"></p>
