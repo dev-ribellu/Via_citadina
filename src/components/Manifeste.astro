@@ -1,0 +1,22 @@
+---
+import * as manifeste from '../content/manifeste.md';
+import { useTraductions } from '../i18n';
+
+const t = useTraductions();
+const { Content } = manifeste;
+// Le fichier ne contient qu'un commentaire tant que le texte n'a pas été collé.
+const html = await manifeste.compiledContent();
+const vide = html.replace(/<!--[\s\S]*?-->/g, '').trim() === '';
+---
+<section id="manifeste" class="scroll-mt-20 bg-creme" aria-labelledby="manifeste-titre">
+  <div class="mx-auto max-w-3xl px-4 py-20 sm:px-6">
+    <h2 id="manifeste-titre" class="text-3xl font-bold sm:text-4xl">{t.manifeste.titre}</h2>
+    <span class="filet mt-4" aria-hidden="true"></span>
+    <div class="prose-manifeste mt-10">
+      {vide ? <p class="italic text-gris">{t.manifeste.vide}</p> : <Content />}
+    </div>
+    <div class="mt-10">
+      <a href="#contribuer" class="btn-primaire">{t.hero.ctaContribuer}</a>
+    </div>
+  </div>
+</section>

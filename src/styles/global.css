@@ -1,0 +1,97 @@
+@import "tailwindcss";
+@import "@fontsource/poppins/600.css";
+@import "@fontsource/poppins/700.css";
+@import "@fontsource/poppins/800.css";
+@import "@fontsource-variable/inter";
+
+@theme {
+  --color-rouge: #E8202A;
+  --color-rouge-fonce: #B8161E;
+  --color-rose: #D6246E;
+  --color-orange: #EE7A1B;
+  --color-jaune: #F5A81C;
+  --color-vert-clair: #7AB929;
+  --color-vert: #1FA83C;
+  --color-vert-fonce: #13792A;
+  --color-encre: #1A1A1A;
+  --color-gris: #4A4A4A;
+  --color-creme: #FAF7F5;
+
+  --font-titre: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  body {
+    @apply bg-white text-encre font-sans antialiased;
+  }
+  h1, h2, h3 {
+    @apply font-titre;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-rose);
+    outline-offset: 3px;
+  }
+}
+
+/* Dégradé signature, en filet sous les titres et en séparateur */
+@utility degrade {
+  background-image: linear-gradient(90deg, #C8203C, #D6246E, #EE7A1B, #F5A81C, #7AB929, #1FA83C);
+}
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 font-titre font-semibold transition-colors;
+}
+
+@layer components {
+  .filet {
+    @apply degrade block h-1.5 w-24 rounded-full;
+  }
+  .btn-primaire {
+    @apply btn bg-rouge text-white hover:bg-rouge-fonce disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-secondaire {
+    @apply btn border-2 border-encre text-encre hover:bg-encre hover:text-white;
+  }
+  .champ {
+    @apply mt-1 block w-full rounded-lg border border-gray-400 bg-white px-3 py-2.5 text-encre placeholder:text-gray-500 focus:border-rose focus:outline-none focus:ring-2 focus:ring-rose/40;
+  }
+  .label {
+    @apply block font-medium text-encre;
+  }
+  .prose-manifeste p {
+    @apply mb-5 text-lg leading-relaxed text-encre;
+  }
+  .prose-manifeste h2, .prose-manifeste h3 {
+    @apply mt-10 mb-4 text-2xl font-bold;
+  }
+  .prose-manifeste strong {
+    @apply font-semibold;
+  }
+  .prose-manifeste ul {
+    @apply mb-5 list-disc pl-6 text-lg;
+  }
+  .prose-legal h2 {
+    @apply mt-10 mb-3 text-2xl font-bold;
+  }
+  .prose-legal h3 {
+    @apply mt-6 mb-2 text-lg font-semibold;
+  }
+  .prose-legal p, .prose-legal li {
+    @apply mb-3 leading-relaxed text-encre;
+  }
+  .prose-legal ul {
+    @apply mb-4 list-disc pl-6;
+  }
+  .prose-legal a {
+    @apply text-rouge-fonce underline;
+  }
+  .a-completer {
+    @apply rounded bg-jaune/30 px-1 font-semibold;
+  }
+}

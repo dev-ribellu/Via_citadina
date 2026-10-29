@@ -1,0 +1,23 @@
+---
+import { useTraductions } from '../i18n';
+
+const t = useTraductions();
+---
+<section class="relative overflow-hidden bg-white" aria-labelledby="hero-titre">
+  <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:py-32">
+    <p class="font-titre text-sm font-semibold uppercase tracking-widest text-rouge-fonce">
+      {t.hero.surtitre}
+    </p>
+    <h1 id="hero-titre" class="mt-4 max-w-4xl text-4xl font-extrabold uppercase leading-tight sm:text-5xl lg:text-6xl">
+      {t.hero.titre}
+    </h1>
+    <span class="filet mt-6 w-32" aria-hidden="true"></span>
+    <p class="mt-8 max-w-2xl text-lg leading-relaxed text-gris sm:text-xl">
+      {t.hero.accroche}
+    </p>
+    <div class="mt-10 flex flex-wrap gap-4">
+      <a href="#contribuer" class="btn-primaire text-lg">{t.hero.ctaContribuer}</a>
+      <a href="#manifeste" class="btn-secondaire text-lg">{t.hero.ctaManifeste}</a>
+    </div>
+  </div>
+</section>

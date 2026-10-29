@@ -1,0 +1,28 @@
+---
+// Affiche /public/logo-via-citadina.png s'il existe, sinon un logo texte provisoire.
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+interface Props {
+  class?: string;
+}
+
+const { class: classe = 'h-12' } = Astro.props;
+// La version recadrée (sans les marges blanches du PNG carré) est prioritaire.
+const logo = ['logo-via-citadina-recadre.png', 'logo-via-citadina.png'].find((f) =>
+  existsSync(join(process.cwd(), 'public', f)),
+);
+---
+{logo ? (
+  <img src={`/${logo}`} alt="Via Citadina" class:list={['w-auto', classe]} />
+) : (
+  <span class:list={['inline-flex items-center gap-2', classe]}>
+    <img src="/favicon.svg" alt="" class="h-full w-auto" />
+    <span
+      class="degrade bg-clip-text font-titre text-xl font-extrabold tracking-wide text-transparent"
+      style="-webkit-background-clip: text;"
+    >
+      VIA CITADINA
+    </span>
+  </span>
+)}

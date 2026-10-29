@@ -1,0 +1,33 @@
+---
+import Logo from './Logo.astro';
+import { useTraductions } from '../i18n';
+
+const t = useTraductions();
+const accueil = Astro.url.pathname === '/';
+---
+<header class="sticky top-0 z-40 border-b border-gray-100 bg-white/95 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+    <a href="/" class="shrink-0 rounded-md" aria-label="Via Citadina – accueil">
+      <Logo class="h-10 sm:h-12" />
+    </a>
+    <nav aria-label="Navigation principale">
+      <ul class="flex items-center gap-2 sm:gap-6">
+        {accueil ? (
+          <>
+            <li class="hidden sm:block">
+              <a href="#manifeste" class="font-medium text-encre hover:text-rouge-fonce">{t.nav.manifeste}</a>
+            </li>
+            <li>
+              <a href="#contribuer" class="btn-primaire px-4 py-2 text-sm sm:text-base">{t.nav.contribuer}</a>
+            </li>
+          </>
+        ) : (
+          <li>
+            <a href="/" class="font-medium text-encre hover:text-rouge-fonce">{t.nav.accueil}</a>
+          </li>
+        )}
+      </ul>
+    </nav>
+  </div>
+  <div class="degrade h-1" aria-hidden="true"></div>
+</header>

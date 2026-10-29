@@ -1,0 +1,265 @@
+---
+import { useTraductions } from '../i18n';
+
+const t = useTraductions();
+const f = t.form;
+const endpoint = import.meta.env.PUBLIC_SHEETS_ENDPOINT ?? '';
+---
+<section id="contribuer" class="scroll-mt-20 bg-white" aria-labelledby="contribuer-titre">
+  <div class="mx-auto max-w-3xl px-4 py-20 sm:px-6">
+    <h2 id="contribuer-titre" class="text-3xl font-bold sm:text-4xl">{f.titre}</h2>
+    <span class="filet mt-4" aria-hidden="true"></span>
+    <p class="mt-6 text-lg leading-relaxed text-gris">{f.intro}</p>
+
+    <form
+      id="form-contribution"
+      class="mt-10 space-y-10"
+      novalidate
+      data-endpoint={endpoint}
+      data-messages={JSON.stringify({ ...f.erreurs, succes: f.succes, envoi: f.envoi, envoyer: f.envoyer })}
+    >
+      <!-- Honeypot : invisible pour les humains, rempli par les robots -->
+      <div class="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+        <label for="website">Site web</label>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <fieldset class="space-y-6">
+        <legend class="font-titre text-xl font-bold">{f.sectionContribution}</legend>
+
+        <div>
+          <label for="theme" class="label">{f.theme}</label>
+          <select id="theme" name="theme" class="champ">
+            <option value="">{f.themeChoisir}</option>
+            {f.themes.map((th) => <option value={th}>{th}</option>)}
+          </select>
+        </div>
+
+        <div>
+          <label for="proposition" class="label">
+            {f.proposition} <span class="text-sm font-normal text-gris">({f.requis})</span>
+          </label>
+          <p id="proposition-aide" class="text-sm text-gris">{f.propositionAide}</p>
+          <textarea
+            id="proposition"
+            name="proposition"
+            rows="6"
+            required
+            minlength="5"
+            maxlength="3000"
+            aria-describedby="proposition-aide proposition-erreur"
+            class="champ"
+          ></textarea>
+          <p id="proposition-erreur" class="mt-1 hidden text-sm font-medium text-rouge-fonce"></p>
+        </div>
+
+        <div>
+          <label for="concretisation" class="label">{f.concretisation}</label>
+          <p id="concretisation-aide" class="text-sm text-gris">{f.concretisationAide}</p>
+          <textarea
+            id="concretisation"
+            name="concretisation"
+            rows="4"
+            maxlength="3000"
+            aria-describedby="concretisation-aide"
+            class="champ"
+          ></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset class="space-y-6 rounded-2xl bg-creme p-6 sm:p-8">
+        <legend class="float-left w-full font-titre text-xl font-bold">{f.sectionCoordonnees}</legend>
+        <p class="clear-both text-gris">{f.coordonneesIntro}</p>
+
+        <div class="grid gap-6 sm:grid-cols-2">
+          <div>
+            <label for="prenom" class="label">{f.prenom}</label>
+            <input type="text" id="prenom" name="prenom" autocomplete="given-name" maxlength="100" class="champ" data-contact />
+          </div>
+          <div>
+            <label for="nom" class="label">{f.nom}</label>
+            <input type="text" id="nom" name="nom" autocomplete="family-name" maxlength="100" class="champ" data-contact />
+          </div>
+          <div>
+            <label for="email" class="label">{f.email}</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              autocomplete="email"
+              maxlength="200"
+              class="champ"
+              aria-describedby="email-erreur"
+              data-contact
+            />
+            <p id="email-erreur" class="mt-1 hidden text-sm font-medium text-rouge-fonce"></p>
+          </div>
+          <div>
+            <label for="telephone" class="label">{f.telephone}</label>
+            <input type="tel" id="telephone" name="telephone" autocomplete="tel" maxlength="30" class="champ" data-contact />
+          </div>
+          <div class="sm:col-span-2">
+            <label for="commune" class="label">{f.commune}</label>
+            <input type="text" id="commune" name="commune" autocomplete="address-level2" maxlength="100" class="champ" data-contact />
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <label class="flex items-start gap-3">
+            <input type="checkbox" name="recontact" class="mt-1 size-5 accent-rouge" data-contact />
+            <span>{f.recontact}</span>
+          </label>
+          <label class="flex items-start gap-3">
+            <input type="checkbox" name="rencontres" class="mt-1 size-5 accent-rouge" data-contact />
+            <span>{f.rencontres}</span>
+          </label>
+        </div>
+
+        <div class="border-t border-gray-300 pt-6">
+          <label class="flex items-start gap-3">
+            <input
+              type="checkbox"
+              id="consentement"
+              name="consentement"
+              class="mt-1 size-5 shrink-0 accent-rouge"
+              aria-describedby="consentement-erreur"
+            />
+            <span class="text-sm leading-relaxed">
+              {f.consentement}
+              <a href="/confidentialite" class="font-medium text-rouge-fonce underline">{f.consentementLien}</a>.
+            </span>
+          </label>
+          <p id="consentement-erreur" class="mt-2 hidden text-sm font-medium text-rouge-fonce"></p>
+        </div>
+      </fieldset>
+
+      <div>
+        <button type="submit" class="btn-primaire w-full text-lg sm:w-auto">{f.envoyer}</button>
+        <div id="form-statut" role="status" aria-live="polite" class="mt-6 hidden rounded-xl p-4 font-medium"></div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  const COOLDOWN_MS = 10_000;
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  const form = document.getElementById('form-contribution') as HTMLFormElement | null;
+
+  if (form) {
+    const endpoint = form.dataset.endpoint ?? '';
+    const msg = JSON.parse(form.dataset.messages ?? '{}') as Record<string, string>;
+    const bouton = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const statut = document.getElementById('form-statut')!;
+    let dernierEnvoi = 0;
+
+    const champ = <T extends HTMLElement = HTMLInputElement>(nom: string) =>
+      form.elements.namedItem(nom) as unknown as T;
+
+    function afficherErreur(id: string, texte: string) {
+      const el = document.getElementById(`${id}-erreur`);
+      const input = document.getElementById(id);
+      if (!el || !input) return;
+      el.textContent = texte;
+      el.classList.toggle('hidden', !texte);
+      input.setAttribute('aria-invalid', texte ? 'true' : 'false');
+    }
+
+    function afficherStatut(type: 'succes' | 'erreur' | null, texte = '') {
+      statut.textContent = texte;
+      statut.classList.toggle('hidden', !type);
+      statut.classList.toggle('bg-vert/10', type === 'succes');
+      statut.classList.toggle('text-vert-fonce', type === 'succes');
+      statut.classList.toggle('bg-rouge/10', type === 'erreur');
+      statut.classList.toggle('text-rouge-fonce', type === 'erreur');
+    }
+
+    function contactRenseigne() {
+      return Array.from(form!.querySelectorAll<HTMLInputElement>('[data-contact]')).some((el) =>
+        el.type === 'checkbox' ? el.checked : el.value.trim() !== '',
+      );
+    }
+
+    function valider() {
+      const proposition = champ<HTMLTextAreaElement>('proposition').value.trim();
+      const email = champ('email').value.trim();
+      const telephone = champ('telephone').value.trim();
+      const consentement = champ('consentement').checked;
+      const veutContact = champ('recontact').checked || champ('rencontres').checked;
+      let premierInvalide: HTMLElement | null = null;
+
+      const erreurs: [string, string][] = [
+        ['proposition', proposition.length < 5 ? msg.proposition : ''],
+        ['email', email && !EMAIL_RE.test(email) ? msg.email : ''],
+        [
+          'consentement',
+          contactRenseigne() && !consentement
+            ? msg.consentement
+            : veutContact && !email && !telephone
+              ? msg.contactRequis
+              : '',
+        ],
+      ];
+
+      for (const [id, texte] of erreurs) {
+        afficherErreur(id, texte);
+        if (texte && !premierInvalide) premierInvalide = document.getElementById(id);
+      }
+      premierInvalide?.focus();
+      return !premierInvalide;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      afficherStatut(null);
+      if (!valider()) return;
+
+      if (Date.now() - dernierEnvoi < COOLDOWN_MS) {
+        afficherStatut('erreur', msg.cooldown);
+        return;
+      }
+      if (!endpoint) {
+        afficherStatut('erreur', msg.configuration);
+        return;
+      }
+
+      const donnees = new FormData(form);
+      const payload = {
+        website: String(donnees.get('website') ?? ''),
+        theme: String(donnees.get('theme') ?? ''),
+        proposition: String(donnees.get('proposition') ?? '').trim(),
+        concretisation: String(donnees.get('concretisation') ?? '').trim(),
+        prenom: String(donnees.get('prenom') ?? '').trim(),
+        nom: String(donnees.get('nom') ?? '').trim(),
+        email: String(donnees.get('email') ?? '').trim(),
+        telephone: String(donnees.get('telephone') ?? '').trim(),
+        commune: String(donnees.get('commune') ?? '').trim(),
+        recontact: donnees.has('recontact'),
+        rencontres: donnees.has('rencontres'),
+        consentement: donnees.has('consentement'),
+      };
+
+      bouton.disabled = true;
+      bouton.textContent = msg.envoi;
+      try {
+        // text/plain évite la requête preflight CORS, qu'Apps Script ne gère pas.
+        const reponse = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+        });
+        const resultat = await reponse.json();
+        if (!resultat.ok) throw new Error(resultat.error ?? 'refus');
+        dernierEnvoi = Date.now();
+        form.reset();
+        afficherStatut('succes', msg.succes);
+      } catch {
+        afficherStatut('erreur', msg.reseau);
+      } finally {
+        bouton.disabled = false;
+        bouton.textContent = msg.envoyer;
+      }
+    });
+  }
+</script>
